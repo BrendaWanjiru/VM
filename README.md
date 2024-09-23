@@ -1,5 +1,3 @@
-# virtualmachinemanager_server
-
 A virtual machine management platform with automation, role-based access control, and payment integration.
 
 Project: VM Management Platform with Role-Based Access and Automation
