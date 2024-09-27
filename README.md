@@ -65,6 +65,10 @@ Background tasks handle notifications such as:
 
 - Sharing the transfer of virtual machines between users.
 - Activation and deactivation of an account by an administrator
+
+  ## Docker
+  docker-compose -f docker-compose.local.yml build
+docker-compose -f docker-compose.local.yml up
   
 ### KUBERNETES
 
