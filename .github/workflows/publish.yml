@@ -24,66 +24,66 @@ jobs:
 
       # Build all the images
       - name: Build Django image
-        run: docker build -f ./compose/production/django/Dockerfile -t autovm_production_django:latest .
+        run: docker build -f ./compose/production/django/Dockerfile -t vm_production_django:latest .
 
       - name: Build Postgres image
-        run: docker build -f ./compose/production/postgres/Dockerfile -t autovm_production_postgres:latest .
+        run: docker build -f ./compose/production/postgres/Dockerfile -t vm_production_postgres:latest .
 
       - name: Build Traefik image
-        run: docker build -f ./compose/production/traefik/Dockerfile -t autovm_production_traefik:latest .
+        run: docker build -f ./compose/production/traefik/Dockerfile -t vm_production_traefik:latest .
 
       - name: Build CeleryWorker image
-        run: docker build -f ./compose/production/django/Dockerfile -t autovm_production_celeryworker:latest .
+        run: docker build -f ./compose/production/django/Dockerfile -t vm_production_celeryworker:latest .
 
       - name: Build CeleryBeat image
-        run: docker build -f ./compose/production/django/Dockerfile -t autovm_production_celerybeat:latest .
+        run: docker build -f ./compose/production/django/Dockerfile -t vm_production_celerybeat:latest .
 
       - name: Build Flower image
-        run: docker build -f ./compose/production/django/Dockerfile -t autovm_production_flower:latest .
+        run: docker build -f ./compose/production/django/Dockerfile -t vm_production_flower:latest .
 
       - name: Build Nginx image
-        run: docker build -f ./compose/production/nginx/Dockerfile -t autovm_production_nginx:latest .
+        run: docker build -f ./compose/production/nginx/Dockerfile -t vm_production_nginx:latest .
 
       # Tag all the images
       - name: Tag Django image
-        run: docker tag autovm_production_django:latest ${{ secrets.DOCKERHUB_USER }}/autovm_production_django:latest
+        run: docker tag vm_production_django:latest ${{ secrets.DOCKERHUB_USER }}/vm_production_django:latest
 
       - name: Tag Postgres image
-        run: docker tag autovm_production_postgres:latest ${{ secrets.DOCKERHUB_USER }}/autovm_production_postgres:latest
+        run: docker tag vm_production_postgres:latest ${{ secrets.DOCKERHUB_USER }}/vm_production_postgres:latest
 
       - name: Tag Traefik image
-        run: docker tag autovm_production_traefik:latest ${{ secrets.DOCKERHUB_USER }}/autovm_production_traefik:latest
+        run: docker tag vm_production_traefik:latest ${{ secrets.DOCKERHUB_USER }}/vm_production_traefik:latest
 
       - name: Tag CeleryWorker image
-        run: docker tag autovm_production_celeryworker:latest ${{ secrets.DOCKERHUB_USER }}/autovm_production_celeryworker:latest
+        run: docker tag vm_production_celeryworker:latest ${{ secrets.DOCKERHUB_USER }}/vm_production_celeryworker:latest
 
       - name: Tag CeleryBeat image
-        run: docker tag autovm_production_celerybeat:latest ${{ secrets.DOCKERHUB_USER }}/autovm_production_celerybeat:latest
+        run: docker tag vm_production_celerybeat:latest ${{ secrets.DOCKERHUB_USER }}/vm_production_celerybeat:latest
 
       - name: Tag Flower image
-        run: docker tag autovm_production_flower:latest ${{ secrets.DOCKERHUB_USER }}/autovm_production_flower:latest
+        run: docker tag vm_production_flower:latest ${{ secrets.DOCKERHUB_USER }}/vm_production_flower:latest
 
       - name: Tag Nginx image
-        run: docker tag autovm_production_nginx:latest ${{ secrets.DOCKERHUB_USER }}/autovm_production_nginx:latest
+        run: docker tag vm_production_nginx:latest ${{ secrets.DOCKERHUB_USER }}/vm_production_nginx:latest
 
       # Push all
       - name: Push Django image
-        run: docker push ${{ secrets.DOCKERHUB_USER }}/autovm_production_django:latest
+        run: docker push ${{ secrets.DOCKERHUB_USER }}/vm_production_django:latest
 
       - name: Push Postgres image
-        run: docker push ${{ secrets.DOCKERHUB_USER }}/autovm_production_postgres:latest
+        run: docker push ${{ secrets.DOCKERHUB_USER }}/vm_production_postgres:latest
 
       - name: Push Traefik image
-        run: docker push ${{ secrets.DOCKERHUB_USER }}/autovm_production_traefik:latest
+        run: docker push ${{ secrets.DOCKERHUB_USER }}/vm_production_traefik:latest
 
       - name: Push CeleryWorker image
-        run: docker push ${{ secrets.DOCKERHUB_USER }}/autovm_production_celeryworker:latest
+        run: docker push ${{ secrets.DOCKERHUB_USER }}/vm_production_celeryworker:latest
 
       - name: Push CeleryBeat image
-        run: docker push ${{ secrets.DOCKERHUB_USER }}/autovm_production_celerybeat:latest
+        run: docker push ${{ secrets.DOCKERHUB_USER }}/vm_production_celerybeat:latest
 
       - name: Push Flower image
-        run: docker push ${{ secrets.DOCKERHUB_USER }}/autovm_production_flower:latest
+        run: docker push ${{ secrets.DOCKERHUB_USER }}/vm_production_flower:latest
 
       - name: Push Nginx image
-        run: docker push ${{ secrets.DOCKERHUB_USER }}/autovm_production_nginx:latest
+        run: docker push ${{ secrets.DOCKERHUB_USER }}/vm_production_nginx:latest

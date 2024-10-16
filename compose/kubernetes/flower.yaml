@@ -27,7 +27,7 @@ spec:
               name: secrets-production-django
           - secretRef:
               name: secrets-production-postgres
-        image: <CR_URL>/autovm_production_flower
+        image: <CR_URL>/vm_production_flower
         name: celeryflower
         ports:
           - containerPort: 5555

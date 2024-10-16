@@ -21,7 +21,7 @@ spec:
               name: envs-production-postgres
           - secretRef:
               name: secrets-production-postgres
-        image: <CR_URL>/autovm_production_postgres
+        image: <CR_URL>/vm_production_postgres
         name: postgres
         ports:
           - containerPort: 5432

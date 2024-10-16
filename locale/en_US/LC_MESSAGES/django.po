@@ -1,4 +1,4 @@
-# Translations for the autovm project
+# Translations for the vm project
 # Copyright (C) 2024 Marvin Kweyu
 # Marvin Kweyu <hello@marvinkweyu.net>, 2024.
 #

@@ -1,9 +1,9 @@
-.. autovm documentation master file, created by
+.. vm documentation master file, created by
    sphinx-quickstart.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to autovm's documentation!
+Welcome to vm's documentation!
 ======================================================================
 
 .. toctree::

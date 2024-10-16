@@ -2,17 +2,17 @@ import random
 from django.core.management.base import BaseCommand
 from django.conf import settings
 
-from autovm.users.models import User
-from autovm.billing.models import BillingAccount, RatePlan, Subscription, Transaction
+from vm.users.models import User
+from vm.billing.models import BillingAccount, RatePlan, Subscription, Transaction
 
 # resources
-from autovm.resources.models import OperatingSystem
-from autovm.resources.models import OperatingSystemVersion
-from autovm.resources.models import Region
-from autovm.resources.models import VirtualMachine
-from autovm.resources.models import VirtualMachineHistory
+from vm.resources.models import OperatingSystem
+from vm.resources.models import OperatingSystemVersion
+from vm.resources.models import Region
+from vm.resources.models import VirtualMachine
+from vm.resources.models import VirtualMachineHistory
 
-from autovm.billing.utils.payment_client import PaymentClient
+from vm.billing.utils.payment_client import PaymentClient
 
 
 class Command(BaseCommand):

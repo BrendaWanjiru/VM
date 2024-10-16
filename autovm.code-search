@@ -1,0 +1,1101 @@
+# Query: autovm
+# ContextLines: 1
+
+359 results - 62 files
+
+.gitignore:
+  275  ### Project template
+  276: vm/media/
+  277  
+
+docker-compose.docs.yml:
+   2    docs:
+   3:     image: vm_local_docs
+   4:     container_name: vm_local_docs
+   5      build:
+
+  12        - ./config:/app/config:z
+  13:       - ./vm:/app/vm:z
+  14      ports:
+
+docker-compose.local.yml:
+  45      image: docker.io/redis:6
+  46:     container_name: vm_local_redis
+  47  
+
+docker-compose.production.yml:
+  16  
+  17:     image: ${CR_URL}/vm_production_django
+  18      volumes:
+  19:       - production_django_media:/app/vm/media
+  20      depends_on:
+
+  31        dockerfile: ./compose/production/postgres/Dockerfile
+  32:     image: ${CR_URL}/vm_production_postgres
+  33      volumes:
+
+  42        dockerfile: ./compose/production/traefik/Dockerfile
+  43:     image: ${CR_URL}/vm_production_traefik
+  44      depends_on:
+
+  61      <<: *django
+  62:     image: ${CR_URL}/vm_production_celeryworker
+  63      command: /start-celeryworker
+
+  66      <<: *django
+  67:     image: ${CR_URL}/vm_production_celerybeat
+  68      command: /start-celerybeat
+
+  71      <<: *django
+  72:     image: ${CR_URL}/vm_production_flower
+  73      command: /start-flower
+
+  78        dockerfile: ./compose/production/nginx/Dockerfile
+  79:     image: ${CR_URL}/vm_production_nginx
+  80      depends_on:
+
+pyproject.toml:
+  11  [tool.coverage.run]
+  12: include = ["vm/**"]
+  13  omit = ["*/migrations/*", "*/tests/*"]
+
+.github\workflows\publish.yml:
+  26        - name: Build Django image
+  27:         run: docker build -f ./compose/production/django/Dockerfile -t vm_production_django:latest .
+  28  
+  29        - name: Build Postgres image
+  30:         run: docker build -f ./compose/production/postgres/Dockerfile -t vm_production_postgres:latest .
+  31  
+  32        - name: Build Traefik image
+  33:         run: docker build -f ./compose/production/traefik/Dockerfile -t vm_production_traefik:latest .
+  34  
+  35        - name: Build CeleryWorker image
+  36:         run: docker build -f ./compose/production/django/Dockerfile -t vm_production_celeryworker:latest .
+  37  
+  38        - name: Build CeleryBeat image
+  39:         run: docker build -f ./compose/production/django/Dockerfile -t vm_production_celerybeat:latest .
+  40  
+  41        - name: Build Flower image
+  42:         run: docker build -f ./compose/production/django/Dockerfile -t vm_production_flower:latest .
+  43  
+  44        - name: Build Nginx image
+  45:         run: docker build -f ./compose/production/nginx/Dockerfile -t vm_production_nginx:latest .
+  46  
+
+  48        - name: Tag Django image
+  49:         run: docker tag vm_production_django:latest ${{ secrets.DOCKERHUB_USER }}/vm_production_django:latest
+  50  
+  51        - name: Tag Postgres image
+  52:         run: docker tag vm_production_postgres:latest ${{ secrets.DOCKERHUB_USER }}/vm_production_postgres:latest
+  53  
+  54        - name: Tag Traefik image
+  55:         run: docker tag vm_production_traefik:latest ${{ secrets.DOCKERHUB_USER }}/vm_production_traefik:latest
+  56  
+  57        - name: Tag CeleryWorker image
+  58:         run: docker tag vm_production_celeryworker:latest ${{ secrets.DOCKERHUB_USER }}/vm_production_celeryworker:latest
+  59  
+  60        - name: Tag CeleryBeat image
+  61:         run: docker tag vm_production_celerybeat:latest ${{ secrets.DOCKERHUB_USER }}/vm_production_celerybeat:latest
+  62  
+  63        - name: Tag Flower image
+  64:         run: docker tag vm_production_flower:latest ${{ secrets.DOCKERHUB_USER }}/vm_production_flower:latest
+  65  
+  66        - name: Tag Nginx image
+  67:         run: docker tag vm_production_nginx:latest ${{ secrets.DOCKERHUB_USER }}/vm_production_nginx:latest
+  68  
+
+  70        - name: Push Django image
+  71:         run: docker push ${{ secrets.DOCKERHUB_USER }}/vm_production_django:latest
+  72  
+  73        - name: Push Postgres image
+  74:         run: docker push ${{ secrets.DOCKERHUB_USER }}/vm_production_postgres:latest
+  75  
+  76        - name: Push Traefik image
+  77:         run: docker push ${{ secrets.DOCKERHUB_USER }}/vm_production_traefik:latest
+  78  
+  79        - name: Push CeleryWorker image
+  80:         run: docker push ${{ secrets.DOCKERHUB_USER }}/vm_production_celeryworker:latest
+  81  
+  82        - name: Push CeleryBeat image
+  83:         run: docker push ${{ secrets.DOCKERHUB_USER }}/vm_production_celerybeat:latest
+  84  
+  85        - name: Push Flower image
+  86:         run: docker push ${{ secrets.DOCKERHUB_USER }}/vm_production_flower:latest
+  87  
+  88        - name: Push Nginx image
+  89:         run: docker push ${{ secrets.DOCKERHUB_USER }}/vm_production_nginx:latest
+
+compose\kubernetes\celerybeat.yaml:
+  29                  name: secrets-production-postgres
+  30:           image: <CR_URL>/vm_production_celerybeat
+  31            name: celerybeat
+
+  33            volumeMounts:
+  34:             - mountPath: /app/vm/media
+  35                name: media-local-storage
+
+compose\kubernetes\celeryworker.yaml:
+  19          - name: celeryworker
+  20:           image: <CR_URL>/vm_production_celeryworker
+  21            args:
+
+  48            volumeMounts:
+  49:             - mountPath: /app/vm/media
+  50                name: media-local-storage
+
+compose\kubernetes\django.yaml:
+  20              - /start
+  21:           image: <CR_URL>/vm_production_django
+  22            name: django
+
+  41            volumeMounts:
+  42:             - mountPath: /app/vm/media
+  43                name: media-local-storage
+
+compose\kubernetes\flower.yaml:
+  29                name: secrets-production-postgres
+  30:         image: <CR_URL>/vm_production_flower
+  31          name: celeryflower
+
+compose\kubernetes\postgres.yaml:
+  23                name: secrets-production-postgres
+  24:         image: <CR_URL>/vm_production_postgres
+  25          name: postgres
+
+compose\kubernetes\configmaps\postgres.yaml:
+  8    POSTGRES_PORT: "5432"
+  9:   POSTGRES_DB: vm
+  10    POSTGRES_USER: debug
+
+compose\kubernetes\namespaces\production.yaml:
+  5    labels:
+  6:     app: vm
+
+config\api_router.py:
+   4  
+   5: from vm.users.api.views import (
+   6      UserViewSet,
+
+  12  
+  13: from vm.resources.api.views import (
+  14      RegionViewSet,
+
+  21  
+  22: from vm.billing.api.views import (
+  23      RatePlanViewSet,
+
+config\asgi.py:
+   2  """
+   3: ASGI config for vm project.
+   4  
+
+  18  # This allows easy placement of apps within the interior
+  19: # vm directory.
+  20  BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
+  21: sys.path.append(str(BASE_DIR / "vm"))
+  22  
+
+config\celery_app.py:
+  7  
+  8: app = Celery("vm")
+  9  
+
+config\urls.py:
+  13  
+  14: from vm.users.api.views import GuestRegistrationView
+  15: from vm.users.api.views import RegistrationView
+  16  
+
+  27      # User management
+  28:     path("users/", include("vm.users.urls", namespace="users")),
+  29      path("accounts/", include("allauth.urls")),
+
+config\wsgi.py:
+   2  """
+   3: WSGI config for vm project.
+   4  
+
+  24  # This allows easy placement of apps within the interior
+  25: # vm directory.
+  26  BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
+  27: sys.path.append(str(BASE_DIR / "vm"))
+  28  # We defer to a DJANGO_SETTINGS_MODULE already in the environment. This breaks
+
+config\settings\production.py:
+  88      "DJANGO_DEFAULT_FROM_EMAIL",
+  89:     default="vm <noreply@example.com>",
+  90  )
+
+  95      "DJANGO_EMAIL_SUBJECT_PREFIX",
+  96:     default="[vm] ",
+  97  )
+
+docs\conf.py:
+  30  
+  31: project = "vm"
+  32  copyright = """2024, Marvin Kweyu"""
+
+docs\howto.rst:
+  6  
+  7: Documentation can be written as rst files in `vm/docs`.
+  8  
+
+docs\index.rst:
+  1: .. vm documentation master file, created by
+  2     sphinx-quickstart.
+
+  5  
+  6: Welcome to vm's documentation!
+  7  ======================================================================
+
+docs\make.bat:
+  12  set BUILDDIR=_build
+  13: set APP=..\vm
+  14  
+
+docs\users.rst:
+  11  
+  12: .. module:: vm.users.models
+  13     :members:
+
+locale\en_US\LC_MESSAGES\django.po:
+  1: # Translations for the vm project
+  2  # Copyright (C) 2024 Marvin Kweyu
+
+locale\fr_FR\LC_MESSAGES\django.po:
+    1: # Translations for the vm project
+    2  # Copyright (C) 2024 Marvin Kweyu
+
+   13  "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+   14: #: vm/templates/account/account_inactive.html:5
+   15: #: vm/templates/account/account_inactive.html:8
+   16  msgid "Account Inactive"
+
+   18  
+   19: #: vm/templates/account/account_inactive.html:10
+   20  msgid "This account is inactive."
+
+   22  
+   23: #: vm/templates/account/email.html:7
+   24  msgid "Account"
+
+   26  
+   27: #: vm/templates/account/email.html:10
+   28  msgid "E-mail Addresses"
+
+   30  
+   31: #: vm/templates/account/email.html:13
+   32  msgid "The following e-mail addresses are associated with your account:"
+
+   34  
+   35: #: vm/templates/account/email.html:27
+   36  msgid "Verified"
+
+   38  
+   39: #: vm/templates/account/email.html:29
+   40  msgid "Unverified"
+
+   42  
+   43: #: vm/templates/account/email.html:31
+   44  msgid "Primary"
+
+   46  
+   47: #: vm/templates/account/email.html:37
+   48  msgid "Make Primary"
+
+   50  
+   51: #: vm/templates/account/email.html:38
+   52  msgid "Re-send Verification"
+
+   54  
+   55: #: vm/templates/account/email.html:39
+   56  msgid "Remove"
+
+   58  
+   59: #: vm/templates/account/email.html:46
+   60  msgid "Warning:"
+
+   62  
+   63: #: vm/templates/account/email.html:46
+   64  msgid ""
+
+   71  
+   72: #: vm/templates/account/email.html:51
+   73  msgid "Add E-mail Address"
+
+   75  
+   76: #: vm/templates/account/email.html:56
+   77  msgid "Add E-mail"
+
+   79  
+   80: #: vm/templates/account/email.html:66
+   81  msgid "Do you really want to remove the selected e-mail address?"
+
+   83  
+   84: #: vm/templates/account/email_confirm.html:6
+   85: #: vm/templates/account/email_confirm.html:10
+   86  msgid "Confirm E-mail Address"
+
+   88  
+   89: #: vm/templates/account/email_confirm.html:16
+   90  #, python-format
+
+   97  
+   98: #: vm/templates/account/email_confirm.html:20
+   99  msgid "Confirm"
+
+  101  
+  102: #: vm/templates/account/email_confirm.html:27
+  103  #, python-format
+
+  111  
+  112: #: vm/templates/account/login.html:7
+  113: #: vm/templates/account/login.html:11
+  114: #: vm/templates/account/login.html:56
+  115: #: vm/templates/base.html:72
+  116  msgid "Sign In"
+
+  118  
+  119: #: vm/templates/account/login.html:17
+  120  msgid "Please sign in with one of your existing third party accounts:"
+
+  122  
+  123: #: vm/templates/account/login.html:19
+  124  #, python-format
+
+  131  
+  132: #: vm/templates/account/login.html:32
+  133  msgid "or"
+
+  135  
+  136: #: vm/templates/account/login.html:41
+  137  #, python-format
+
+  144  
+  145: #: vm/templates/account/login.html:55
+  146  msgid "Forgot Password?"
+
+  148  
+  149: #: vm/templates/account/logout.html:5
+  150: #: vm/templates/account/logout.html:8
+  151: #: vm/templates/account/logout.html:17
+  152: #: vm/templates/base.html:61
+  153  msgid "Sign Out"
+
+  155  
+  156: #: vm/templates/account/logout.html:10
+  157  msgid "Are you sure you want to sign out?"
+
+  159  
+  160: #: vm/templates/account/password_change.html:6
+  161: #: vm/templates/account/password_change.html:9
+  162: #: vm/templates/account/password_change.html:14
+  163: #: vm/templates/account/password_reset_from_key.html:5
+  164: #: vm/templates/account/password_reset_from_key.html:8
+  165: #: vm/templates/account/password_reset_from_key_done.html:4
+  166: #: vm/templates/account/password_reset_from_key_done.html:7
+  167  msgid "Change Password"
+
+  169  
+  170: #: vm/templates/account/password_reset.html:7
+  171: #: vm/templates/account/password_reset.html:11
+  172: #: vm/templates/account/password_reset_done.html:6
+  173: #: vm/templates/account/password_reset_done.html:9
+  174  msgid "Password Reset"
+
+  176  
+  177: #: vm/templates/account/password_reset.html:16
+  178  msgid ""
+
+  184  
+  185: #: vm/templates/account/password_reset.html:21
+  186  msgid "Reset My Password"
+
+  188  
+  189: #: vm/templates/account/password_reset.html:24
+  190  msgid "Please contact us if you have any trouble resetting your password."
+
+  194  
+  195: #: vm/templates/account/password_reset_done.html:15
+  196  msgid ""
+
+  202  
+  203: #: vm/templates/account/password_reset_from_key.html:8
+  204  msgid "Bad Token"
+
+  206  
+  207: #: vm/templates/account/password_reset_from_key.html:12
+  208  #, python-format
+
+  217  
+  218: #: vm/templates/account/password_reset_from_key.html:18
+  219  msgid "change password"
+
+  221  
+  222: #: vm/templates/account/password_reset_from_key.html:21
+  223: #: vm/templates/account/password_reset_from_key_done.html:8
+  224  msgid "Your password is now changed."
+
+  226  
+  227: #: vm/templates/account/password_set.html:6
+  228: #: vm/templates/account/password_set.html:9
+  229: #: vm/templates/account/password_set.html:14
+  230  msgid "Set Password"
+
+  232  
+  233: #: vm/templates/account/signup.html:6
+  234  msgid "Signup"
+
+  236  
+  237: #: vm/templates/account/signup.html:9
+  238: #: vm/templates/account/signup.html:19
+  239: #: vm/templates/base.html:67
+  240  msgid "Sign Up"
+
+  242  
+  243: #: vm/templates/account/signup.html:11
+  244  #, python-format
+
+  249  
+  250: #: vm/templates/account/signup_closed.html:5
+  251: #: vm/templates/account/signup_closed.html:8
+  252  msgid "Sign Up Closed"
+
+  254  
+  255: #: vm/templates/account/signup_closed.html:10
+  256  msgid "We are sorry, but the sign up is currently closed."
+
+  258  
+  259: #: vm/templates/account/verification_sent.html:5
+  260: #: vm/templates/account/verification_sent.html:8
+  261: #: vm/templates/account/verified_email_required.html:5
+  262: #: vm/templates/account/verified_email_required.html:8
+  263  msgid "Verify Your E-mail Address"
+
+  265  
+  266: #: vm/templates/account/verification_sent.html:10
+  267  msgid ""
+
+  274  
+  275: #: vm/templates/account/verified_email_required.html:12
+  276  msgid ""
+
+  284  
+  285: #: vm/templates/account/verified_email_required.html:16
+  286  msgid ""
+
+  294  
+  295: #: vm/templates/account/verified_email_required.html:20
+  296  #, python-format
+
+  303  
+  304: #: vm/templates/base.html:57
+  305  msgid "My Profile"
+
+  307  
+  308: #: vm/users/admin.py:17
+  309  msgid "Personal info"
+
+  311  
+  312: #: vm/users/admin.py:19
+  313  msgid "Permissions"
+
+  315  
+  316: #: vm/users/admin.py:30
+  317  msgid "Important dates"
+
+  319  
+  320: #: vm/users/apps.py:7
+  321  msgid "Users"
+
+  323  
+  324: #: vm/users/forms.py:24
+  325: #: vm/users/tests/test_forms.py:36
+  326  msgid "This username has already been taken."
+
+  328  
+  329: #: vm/users/models.py:15
+  330  msgid "Name of User"
+
+  332  
+  333: #: vm/users/views.py:23
+  334  msgid "Information successfully updated"
+
+locale\pt_BR\LC_MESSAGES\django.po:
+    1: # Translations for the vm project
+    2  # Copyright (C) 2024 Marvin Kweyu
+
+   13  "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+   14: #: vm/templates/account/account_inactive.html:5
+   15: #: vm/templates/account/account_inactive.html:8
+   16  msgid "Account Inactive"
+
+   18  
+   19: #: vm/templates/account/account_inactive.html:10
+   20  msgid "This account is inactive."
+
+   22  
+   23: #: vm/templates/account/email.html:7
+   24  msgid "Account"
+
+   26  
+   27: #: vm/templates/account/email.html:10
+   28  msgid "E-mail Addresses"
+
+   30  
+   31: #: vm/templates/account/email.html:13
+   32  msgid "The following e-mail addresses are associated with your account:"
+
+   34  
+   35: #: vm/templates/account/email.html:27
+   36  msgid "Verified"
+
+   38  
+   39: #: vm/templates/account/email.html:29
+   40  msgid "Unverified"
+
+   42  
+   43: #: vm/templates/account/email.html:31
+   44  msgid "Primary"
+
+   46  
+   47: #: vm/templates/account/email.html:37
+   48  msgid "Make Primary"
+
+   50  
+   51: #: vm/templates/account/email.html:38
+   52  msgid "Re-send Verification"
+
+   54  
+   55: #: vm/templates/account/email.html:39
+   56  msgid "Remove"
+
+   58  
+   59: #: vm/templates/account/email.html:46
+   60  msgid "Warning:"
+
+   62  
+   63: #: vm/templates/account/email.html:46
+   64  msgid ""
+
+   71  
+   72: #: vm/templates/account/email.html:51
+   73  msgid "Add E-mail Address"
+
+   75  
+   76: #: vm/templates/account/email.html:56
+   77  msgid "Add E-mail"
+
+   79  
+   80: #: vm/templates/account/email.html:66
+   81  msgid "Do you really want to remove the selected e-mail address?"
+
+   83  
+   84: #: vm/templates/account/email_confirm.html:6
+   85: #: vm/templates/account/email_confirm.html:10
+   86  msgid "Confirm E-mail Address"
+
+   88  
+   89: #: vm/templates/account/email_confirm.html:16
+   90  #, python-format
+
+   97  
+   98: #: vm/templates/account/email_confirm.html:20
+   99  msgid "Confirm"
+
+  101  
+  102: #: vm/templates/account/email_confirm.html:27
+  103  #, python-format
+
+  109  
+  110: #: vm/templates/account/login.html:7
+  111: #: vm/templates/account/login.html:11
+  112: #: vm/templates/account/login.html:56
+  113: #: vm/templates/base.html:72
+  114  msgid "Sign In"
+
+  116  
+  117: #: vm/templates/account/login.html:17
+  118  msgid "Please sign in with one of your existing third party accounts:"
+
+  120  
+  121: #: vm/templates/account/login.html:19
+  122  #, python-format
+
+  127  
+  128: #: vm/templates/account/login.html:32
+  129  msgid "or"
+
+  131  
+  132: #: vm/templates/account/login.html:41
+  133  #, python-format
+
+  139  
+  140: #: vm/templates/account/login.html:55
+  141  msgid "Forgot Password?"
+
+  143  
+  144: #: vm/templates/account/logout.html:5
+  145: #: vm/templates/account/logout.html:8
+  146: #: vm/templates/account/logout.html:17
+  147: #: vm/templates/base.html:61
+  148  msgid "Sign Out"
+
+  150  
+  151: #: vm/templates/account/logout.html:10
+  152  msgid "Are you sure you want to sign out?"
+
+  154  
+  155: #: vm/templates/account/password_change.html:6
+  156: #: vm/templates/account/password_change.html:9
+  157: #: vm/templates/account/password_change.html:14
+  158: #: vm/templates/account/password_reset_from_key.html:5
+  159: #: vm/templates/account/password_reset_from_key.html:8
+  160: #: vm/templates/account/password_reset_from_key_done.html:4
+  161: #: vm/templates/account/password_reset_from_key_done.html:7
+  162  msgid "Change Password"
+
+  164  
+  165: #: vm/templates/account/password_reset.html:7
+  166: #: vm/templates/account/password_reset.html:11
+  167: #: vm/templates/account/password_reset_done.html:6
+  168: #: vm/templates/account/password_reset_done.html:9
+  169  msgid "Password Reset"
+
+  171  
+  172: #: vm/templates/account/password_reset.html:16
+  173  msgid ""
+
+  177  
+  178: #: vm/templates/account/password_reset.html:21
+  179  msgid "Reset My Password"
+
+  181  
+  182: #: vm/templates/account/password_reset.html:24
+  183  msgid "Please contact us if you have any trouble resetting your password."
+
+  185  
+  186: #: vm/templates/account/password_reset_done.html:15
+  187  msgid ""
+
+  191  
+  192: #: vm/templates/account/password_reset_from_key.html:8
+  193  msgid "Bad Token"
+
+  195  
+  196: #: vm/templates/account/password_reset_from_key.html:12
+  197  #, python-format
+
+  204  
+  205: #: vm/templates/account/password_reset_from_key.html:18
+  206  msgid "change password"
+
+  208  
+  209: #: vm/templates/account/password_reset_from_key.html:21
+  210: #: vm/templates/account/password_reset_from_key_done.html:8
+  211  msgid "Your password is now changed."
+
+  213  
+  214: #: vm/templates/account/password_set.html:6
+  215: #: vm/templates/account/password_set.html:9
+  216: #: vm/templates/account/password_set.html:14
+  217  msgid "Set Password"
+
+  219  
+  220: #: vm/templates/account/signup.html:6
+  221  msgid "Signup"
+
+  223  
+  224: #: vm/templates/account/signup.html:9
+  225: #: vm/templates/account/signup.html:19
+  226: #: vm/templates/base.html:67
+  227  msgid "Sign Up"
+
+  229  
+  230: #: vm/templates/account/signup.html:11
+  231  #, python-format
+
+  235  
+  236: #: vm/templates/account/signup_closed.html:5
+  237: #: vm/templates/account/signup_closed.html:8
+  238  msgid "Sign Up Closed"
+
+  240  
+  241: #: vm/templates/account/signup_closed.html:10
+  242  msgid "We are sorry, but the sign up is currently closed."
+
+  244  
+  245: #: vm/templates/account/verification_sent.html:5
+  246: #: vm/templates/account/verification_sent.html:8
+  247: #: vm/templates/account/verified_email_required.html:5
+  248: #: vm/templates/account/verified_email_required.html:8
+  249  msgid "Verify Your E-mail Address"
+
+  251  
+  252: #: vm/templates/account/verification_sent.html:10
+  253  msgid ""
+
+  258  
+  259: #: vm/templates/account/verified_email_required.html:12
+  260  msgid ""
+
+  267  
+  268: #: vm/templates/account/verified_email_required.html:16
+  269  msgid ""
+
+  276  
+  277: #: vm/templates/account/verified_email_required.html:20
+  278  #, python-format
+
+  283  
+  284: #: vm/templates/base.html:57
+  285  msgid "My Profile"
+
+  287  
+  288: #: vm/users/admin.py:17
+  289  msgid "Personal info"
+
+  291  
+  292: #: vm/users/admin.py:19
+  293  msgid "Permissions"
+
+  295  
+  296: #: vm/users/admin.py:30
+  297  msgid "Important dates"
+
+  299  
+  300: #: vm/users/apps.py:7
+  301  msgid "Users"
+
+  303  
+  304: #: vm/users/forms.py:24
+  305: #: vm/users/tests/test_forms.py:36
+  306  msgid "This username has already been taken."
+
+  308  
+  309: #: vm/users/models.py:15
+  310  msgid "Name of User"
+
+  312  
+  313: #: vm/users/views.py:23
+  314  msgid "Information successfully updated"
+
+vm\conftest.py:
+  2  
+  3: from vm.users.models import User
+  4: from vm.users.tests.factories import UserFactory
+  5  
+
+vm\billing\admin.py:
+  2  
+  3: from vm.billing.models import BillingAccount
+  4: from vm.billing.models import RatePlan
+  5: from vm.billing.models import Subscription
+  6: from vm.billing.models import Transaction
+  7  
+
+vm\billing\apps.py:
+  6      default__field = "django.db.models.BigField"
+  7:     name = "vm.billing"
+  8      verbose_name = _("Billing")
+
+vm\billing\models.py:
+  4  
+  5: from vm.users.models import User
+  6  
+
+vm\billing\api\serializers.py:
+  3  
+  4: from vm.billing.models import BillingAccount
+  5: from vm.billing.models import RatePlan
+  6: from vm.billing.models import Subscription
+  7: from vm.billing.models import Transaction
+  8: from vm.billing.utils.payment_client import PaymentClient
+  9  
+
+vm\billing\api\views.py:
+   9  
+  10: from vm.billing.api.serializers import BillingAccountSerializer
+  11: from vm.billing.api.serializers import RatePlanSerializer
+  12: from vm.billing.api.serializers import SubscriptionSerializer
+  13: from vm.billing.api.serializers import TransactionSerializer
+  14: from vm.billing.models import BillingAccount
+  15: from vm.billing.models import RatePlan
+  16: from vm.billing.models import Subscription
+  17: from vm.billing.models import Transaction
+  18  
+  19: from vm.resources.api.permissions import IsAdminOrReadOnly
+  20  
+
+vm\contrib\sites\migrations\0003_set_site_domain_and_name.py:
+  44          "example.com",
+  45:         "vm",
+  46      )
+
+vm\resources\admin.py:
+  2  
+  3: from vm.resources.models import Backup
+  4: from vm.resources.models import Notification
+  5: from vm.resources.models import OperatingSystem
+  6: from vm.resources.models import OperatingSystemVersion
+  7: from vm.resources.models import Region
+  8: from vm.resources.models import VirtualMachine
+  9: from vm.resources.models import VirtualMachineHistory
+  10  
+
+vm\resources\apps.py:
+  6      default__field = "django.db.models.BigField"
+  7:     name = "vm.resources"
+  8      verbose_name = _("Resources")
+
+vm\resources\models.py:
+  5  
+  6: from vm.resources.utils.generate_vm_name import generate_vm_name
+  7: from vm.users.models import User
+  8  
+
+vm\resources\tasks.py:
+  5  
+  6: from vm.users.models import User
+  7: from vm.resources.models import (
+  8      Notification,
+
+vm\resources\api\permissions.py:
+  3  from rest_framework import permissions
+  4: from vm.users.models import Customer
+  5  
+
+vm\resources\api\serializers.py:
+  2  
+  3: from vm.resources.models import Backup
+  4: from vm.resources.models import Notification
+  5: from vm.resources.models import OperatingSystemVersion
+  6: from vm.resources.models import Region
+  7: from vm.resources.models import VirtualMachine
+  8: from vm.resources.models import VirtualMachineHistory
+  9  
+
+vm\resources\api\views.py:
+   8  
+   9: from vm.resources.models import (
+  10      Backup,
+
+  16  )
+  17: from vm.resources.tasks import notify_user
+  18  
+  19: from vm.users.models import User, Customer
+  20: from vm.billing.models import Subscription
+  21: from vm.billing.models import BillingAccount
+  22: from vm.resources.api.permissions import IsNotSuspendedCustomer
+  23  
+
+vm\resources\tests\test_urls.py:
+   6  
+   7: from vm.users.models import User, Customer
+   8: from vm.billing.models import BillingAccount, RatePlan, Subscription, Transaction
+   9  
+  10  # resources
+  11: from vm.resources.models import OperatingSystem
+  12: from vm.resources.models import OperatingSystemVersion
+  13: from vm.resources.models import Region
+  14: from vm.resources.models import VirtualMachine
+  15: from vm.resources.models import VirtualMachineHistory
+  16  
+  17: from vm.billing.utils.payment_client import PaymentClient
+  18  
+
+vm\templates\base.html:
+  10        {% block title %}
+  11:         vm
+  12        {% endblock title %}
+
+  55              </button>
+  56:             <a class="navbar-brand" href="{% url 'home' %}">vm</a>
+  57              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+vm\users\adapters.py:
+  12  
+  13:     from vm.users.models import User
+  14  
+
+vm\users\apps.py:
+   7  class UsersConfig(AppConfig):
+   8:     name = "vm.users"
+   9      verbose_name = _("Users")
+
+  12          with contextlib.suppress(ImportError):
+  13:             import vm.users.signals  # noqa: F401
+
+vm\users\views.py:
+   9  
+  10: from vm.users.models import User
+  11  
+
+vm\users\api\serializers.py:
+  3  
+  4: from vm.users.models import User, Customer, Guest
+  5: from vm.billing.models import BillingAccount
+  6: from vm.billing.api.serializers import RatePlanSerializer
+  7  from dj_rest_auth.registration.serializers import RegisterSerializer
+
+vm\users\api\views.py:
+  14  
+  15: from vm.users.models import Customer, GeneralAdmin, Guest, User
+  16: from vm.billing.models import BillingAccount
+  17: from vm.resources.tasks import notify_suspended_user
+  18  
+
+vm\users\management\commands\createadmin.py:
+  3  
+  4: from vm.users.models import User
+  5  
+
+vm\users\management\commands\initializedata.py:
+   4  
+   5: from vm.users.models import User
+   6: from vm.billing.models import BillingAccount, RatePlan, Subscription, Transaction
+   7  
+   8  # resources
+   9: from vm.resources.models import OperatingSystem
+  10: from vm.resources.models import OperatingSystemVersion
+  11: from vm.resources.models import Region
+  12: from vm.resources.models import VirtualMachine
+  13: from vm.resources.models import VirtualMachineHistory
+  14  
+  15: from vm.billing.utils.payment_client import PaymentClient
+  16  
+
+vm\users\migrations\0001_initial.py:
+    6  
+    7: import vm.users.models
+    8  
+
+  115              managers=[
+  116:                 ("objects", vm.users.models.UserManager()),
+  117              ],
+
+vm\users\tests\factories.py:
+  7  
+  8: from vm.users.models import User
+  9  
+
+vm\users\tests\test_admin.py:
+  10  
+  11: from vm.users.models import User
+  12  
+
+  50          # Reload the admin module to apply the setting change
+  51:         import vm.users.admin as users_admin
+  52  
+
+vm\users\tests\test_drf_urls.py:
+  3  
+  4: from vm.users.models import User
+  5  
+
+vm\users\tests\test_drf_views.py:
+  3  
+  4: from vm.users.api.views import UserViewSet
+  5: from vm.users.models import User
+  6  
+
+vm\users\tests\test_forms.py:
+  4  
+  5: from vm.users.forms import UserAdminCreationForm
+  6: from vm.users.models import User
+  7  
+
+vm\users\tests\test_managers.py:
+  5  
+  6: from vm.users.models import User
+  7  
+
+vm\users\tests\test_models.py:
+  1: from vm.users.models import User
+  2  
+
+vm\users\tests\test_tasks.py:
+  3  
+  4: from vm.users.tasks import get_users_count
+  5: from vm.users.tests.factories import UserFactory
+  6  
+
+vm\users\tests\test_urls.py:
+  3  
+  4: from vm.users.models import User
+  5  
+
+vm\users\tests\test_views.py:
+  14  
+  15: from vm.users.forms import UserAdminChangeForm
+  16: from vm.users.models import User
+  17: from vm.users.tests.factories import UserFactory
+  18: from vm.users.views import UserRedirectView
+  19: from vm.users.views import UserUpdateView
+  20: from vm.users.views import user_detail_view
+  21  
+
+C:\Users\User\AppData\Roaming\Code\logs\20241015T184922\window1\exthost\ms-vscode-remote.remote-containers\remoteContainers-2024-10-15T18-12-17.580Z.log:
+    335    redis:
+    336:     container_name: vm_local_redis
+    337      image: docker.io/redis:6
+
+    570    redis:
+    571:     container_name: vm_local_redis
+    572      image: docker.io/redis:6
+
+  44550   ✔ Container vm_local_mailpit    Running                                   0.0s
+  44551:  ✔ Container vm_local_redis  Running                                   0.0s
+  44552   - Container vm_local_postgres   Recreate                                  0.2s
+
+  44555   ✔ Container vm_local_mailpit    Running                                   0.0s
+  44556:  ✔ Container vm_local_redis  Running                                   0.0s
+  44557   - Container vm_local_postgres   Recreate                                  0.2s
+
+  44893   ✔ Container vm_local_mailpit       Runnin...                              0.0s
+  44894:  ✔ Container vm_local_redis     Runn...                                0.0s
+  44895   ✔ Container vm_local_postgres      Recre...                              14.6s
+
+  44902   ✔ Container vm_local_mailpit       Runnin...                              0.0s
+  44903:  ✔ Container vm_local_redis     Runn...                                0.0s
+  44904   ✔ Container vm_local_postgres      Recre...                              14.6s
+
+  45906   ✔ Container vm_local_mailpit       Runnin...                              0.0s
+  45907:  ✔ Container vm_local_redis     Runn...                                0.0s
+  45908   ✔ Container vm_local_postgres      Recre...                              14.6s
+
+  46505   ✔ Container vm_local_mailpit       Runnin...                              0.0s
+  46506:  ✔ Container vm_local_redis     Runn...                                0.0s
+  46507   ✔ Container vm_local_postgres      Recre...                              14.6s
+
+  46660   ✔ Container vm_local_mailpit       Runnin...                              0.0s
+  46661:  ✔ Container vm_local_redis     Runn...                                0.0s
+  46662   ✔ Container vm_local_postgres      Recre...                              14.6s
+
+  46951   ✔ Container vm_local_mailpit       Runnin...                              0.0s
+  46952:  ✔ Container vm_local_redis     Runn...                                0.0s
+  46953   ✔ Container vm_local_postgres      Recre...                              14.6s
+
+  46967   ✔ Container vm_local_mailpit       Runnin...                              0.0s
+  46968:  ✔ Container vm_local_redis     Runn...                                0.0s
+  46969   - Container vm_local_postgres      Start...                              53.0s
+
+  47193   ✔ Container vm_local_mailpit       Runnin...                              0.0s
+  47194:  ✔ Container vm_local_redis     Runn...                                0.0s
+  47195   ✔ Container vm_local_postgres      Start...                              56.4s
+
+  47584   ✔ Container vm_local_mailpit       Runnin...                              0.0s
+  47585:  ✔ Container vm_local_redis     Runn...                                0.0s
+  47586   ✔ Container vm_local_postgres      Start...                              56.4s
+
+  47614   ✔ Container vm_local_mailpit       Runnin...                              0.0s
+  47615:  ✔ Container vm_local_redis     Runn...                                0.0s
+  47616   ✔ Container vm_local_postgres      Start...                              56.4s
+
+  47684   ✔ Container vm_local_mailpit       Runnin...                              0.0s
+  47685:  ✔ Container vm_local_redis     Runn...                                0.0s
+  47686   ✔ Container vm_local_postgres      Start...                              56.4s
+
+  47754   ✔ Container vm_local_mailpit       Runnin...                              0.0s
+  47755:  ✔ Container vm_local_redis     Runn...                                0.0s
+  47756   ✔ Container vm_local_postgres      Start...                              56.4s

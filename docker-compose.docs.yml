@@ -1,7 +1,7 @@
 services:
   docs:
-    image: autovm_local_docs
-    container_name: autovm_local_docs
+    image: vm_local_docs
+    container_name: vm_local_docs
     build:
       context: .
       dockerfile: ./compose/local/docs/Dockerfile
@@ -10,7 +10,7 @@ services:
     volumes:
       - ./docs:/docs:z
       - ./config:/app/config:z
-      - ./autovm:/app/autovm:z
+      - ./vm:/app/vm:z
     ports:
       - '9000:9000'
     command: /start-docs

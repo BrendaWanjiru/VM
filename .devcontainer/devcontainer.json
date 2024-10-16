@@ -1,6 +1,6 @@
 // For format details, see https://containers.dev/implementors/json_reference/
 {
-    "name": "autovm_dev",
+    "name": "vm_dev",
     "dockerComposeFile": [
         "../docker-compose.local.yml"
     ],

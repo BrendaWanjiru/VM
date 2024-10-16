@@ -3,8 +3,8 @@ from django.db import transaction
 
 from config import celery_app
 
-from autovm.users.models import User
-from autovm.resources.models import (
+from vm.users.models import User
+from vm.resources.models import (
     Notification,
     VirtualMachine,
     VirtualMachineHistory,

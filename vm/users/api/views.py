@@ -12,9 +12,9 @@ from rest_framework.viewsets import GenericViewSet, ModelViewSet
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.tokens import AccessToken
 
-from autovm.users.models import Customer, GeneralAdmin, Guest, User
-from autovm.billing.models import BillingAccount
-from autovm.resources.tasks import notify_suspended_user
+from vm.users.models import Customer, GeneralAdmin, Guest, User
+from vm.billing.models import BillingAccount
+from vm.resources.tasks import notify_suspended_user
 
 from .serializers import (
     CustomerUserSerializer,

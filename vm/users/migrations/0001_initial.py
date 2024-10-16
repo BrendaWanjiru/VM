@@ -4,7 +4,7 @@ import django.utils.timezone
 from django.db import migrations
 from django.db import models
 
-import autovm.users.models
+import vm.users.models
 
 
 class Migration(migrations.Migration):
@@ -113,7 +113,7 @@ class Migration(migrations.Migration):
                 "abstract": False,
             },
             managers=[
-                ("objects", autovm.users.models.UserManager()),
+                ("objects", vm.users.models.UserManager()),
             ],
         ),
     ]

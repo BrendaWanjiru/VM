@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from django.conf import settings
 
-from autovm.users.models import User
+from vm.users.models import User
 
 
 class Command(BaseCommand):

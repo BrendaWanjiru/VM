@@ -1,7 +1,7 @@
 from django.urls import resolve
 from django.urls import reverse
 
-from autovm.users.models import User
+from vm.users.models import User
 
 
 def test_user_detail(user: User):

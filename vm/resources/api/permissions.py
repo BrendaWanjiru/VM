@@ -1,7 +1,7 @@
 import logging
 from rest_framework.permissions import BasePermission
 from rest_framework import permissions
-from autovm.users.models import Customer
+from vm.users.models import Customer
 
 
 logger = logging.getLogger(__name__)

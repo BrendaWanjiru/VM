@@ -28,7 +28,7 @@ django.setup()
 
 # -- Project information -----------------------------------------------------
 
-project = "autovm"
+project = "vm"
 copyright = """2024, Marvin Kweyu"""
 author = "Marvin Kweyu"
 

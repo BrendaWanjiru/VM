@@ -273,7 +273,7 @@ tags
 dump.rdb
 
 ### Project template
-autovm/media/
+vm/media/
 
 .pytest_cache/
 .ipython/

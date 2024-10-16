@@ -4,17 +4,17 @@ import pytest
 from django.urls import reverse
 from rest_framework.test import APIClient
 
-from autovm.users.models import User, Customer
-from autovm.billing.models import BillingAccount, RatePlan, Subscription, Transaction
+from vm.users.models import User, Customer
+from vm.billing.models import BillingAccount, RatePlan, Subscription, Transaction
 
 # resources
-from autovm.resources.models import OperatingSystem
-from autovm.resources.models import OperatingSystemVersion
-from autovm.resources.models import Region
-from autovm.resources.models import VirtualMachine
-from autovm.resources.models import VirtualMachineHistory
+from vm.resources.models import OperatingSystem
+from vm.resources.models import OperatingSystemVersion
+from vm.resources.models import Region
+from vm.resources.models import VirtualMachine
+from vm.resources.models import VirtualMachineHistory
 
-from autovm.billing.utils.payment_client import PaymentClient
+from vm.billing.utils.payment_client import PaymentClient
 
 
 @pytest.fixture

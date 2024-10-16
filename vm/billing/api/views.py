@@ -7,16 +7,16 @@ from rest_framework.filters import SearchFilter
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from autovm.billing.api.serializers import BillingAccountSerializer
-from autovm.billing.api.serializers import RatePlanSerializer
-from autovm.billing.api.serializers import SubscriptionSerializer
-from autovm.billing.api.serializers import TransactionSerializer
-from autovm.billing.models import BillingAccount
-from autovm.billing.models import RatePlan
-from autovm.billing.models import Subscription
-from autovm.billing.models import Transaction
+from vm.billing.api.serializers import BillingAccountSerializer
+from vm.billing.api.serializers import RatePlanSerializer
+from vm.billing.api.serializers import SubscriptionSerializer
+from vm.billing.api.serializers import TransactionSerializer
+from vm.billing.models import BillingAccount
+from vm.billing.models import RatePlan
+from vm.billing.models import Subscription
+from vm.billing.models import Transaction
 
-from autovm.resources.api.permissions import IsAdminOrReadOnly
+from vm.resources.api.permissions import IsAdminOrReadOnly
 
 
 class RatePlanViewSet(ModelViewSet):

@@ -2,37 +2,39 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    service: redis
+    app: redis  # Changed to 'app' for more conventional labeling
   namespace: production
   name: redis
 spec:
-  replicas: 1
+  replicas: 1  # Number of replicas for redundancy
   selector:
     matchLabels:
-      service: redis
-  strategy: {}
+      app: redis  # Ensure this matches the label in the template
+  strategy: {}  # You can specify deployment strategies if needed
   template:
     metadata:
       labels:
-        service: redis
+        app: redis  # Consistent label for pod selection
     spec:
       containers:
-      - image: redis:5.0
+      - image: redis:5.0  # Redis image
         name: redis
-      restartPolicy: Always
-      volumes: null
+        ports:  # Expose the container's port
+        - containerPort: 6379  # Default Redis port
+      restartPolicy: Always  # Always restart the container if it fails
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    service: redis
+    app: redis  # Changed to 'app' for consistency
   namespace: production
   name: redis
 spec:
   ports:
-  - name: "6378"
+  - name: redis  # Give the port a name for clarity
     protocol: TCP
-    port: 6379
+    port: 6379  # Service port
+    targetPort: 6379  # Port on the container
   selector:
-    service: redis
+    app: redis  

@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.viewsets import ModelViewSet
 
-from autovm.resources.models import (
+from vm.resources.models import (
     Backup,
     Notification,
     OperatingSystemVersion,
@@ -14,12 +14,12 @@ from autovm.resources.models import (
     VirtualMachine,
     VirtualMachineHistory,
 )
-from autovm.resources.tasks import notify_user
+from vm.resources.tasks import notify_user
 
-from autovm.users.models import User, Customer
-from autovm.billing.models import Subscription
-from autovm.billing.models import BillingAccount
-from autovm.resources.api.permissions import IsNotSuspendedCustomer
+from vm.users.models import User, Customer
+from vm.billing.models import Subscription
+from vm.billing.models import BillingAccount
+from vm.resources.api.permissions import IsNotSuspendedCustomer
 
 from .serializers import (
     BackupSerializer,

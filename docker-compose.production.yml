@@ -14,9 +14,9 @@ services:
       context: .
       dockerfile: ./compose/production/django/Dockerfile
 
-    image: ${CR_URL}/autovm_production_django
+    image: ${CR_URL}/vm_production_django
     volumes:
-      - production_django_media:/app/autovm/media
+      - production_django_media:/app/vm/media
     depends_on:
       - postgres
       - redis
@@ -29,7 +29,7 @@ services:
     build:
       context: .
       dockerfile: ./compose/production/postgres/Dockerfile
-    image: ${CR_URL}/autovm_production_postgres
+    image: ${CR_URL}/vm_production_postgres
     volumes:
       - production_postgres_data:/var/lib/postgresql/data
       - production_postgres_data_backups:/backups
@@ -40,7 +40,7 @@ services:
     build:
       context: .
       dockerfile: ./compose/production/traefik/Dockerfile
-    image: ${CR_URL}/autovm_production_traefik
+    image: ${CR_URL}/vm_production_traefik
     depends_on:
       - django
     volumes:
@@ -59,24 +59,24 @@ services:
 
   celeryworker:
     <<: *django
-    image: ${CR_URL}/autovm_production_celeryworker
+    image: ${CR_URL}/vm_production_celeryworker
     command: /start-celeryworker
 
   celerybeat:
     <<: *django
-    image: ${CR_URL}/autovm_production_celerybeat
+    image: ${CR_URL}/vm_production_celerybeat
     command: /start-celerybeat
 
   flower:
     <<: *django
-    image: ${CR_URL}/autovm_production_flower
+    image: ${CR_URL}/vm_production_flower
     command: /start-flower
 
   nginx:
     build:
       context: .
       dockerfile: ./compose/production/nginx/Dockerfile
-    image: ${CR_URL}/autovm_production_nginx
+    image: ${CR_URL}/vm_production_nginx
     depends_on:
       - django
     volumes:

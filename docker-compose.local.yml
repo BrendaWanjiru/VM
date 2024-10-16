@@ -1,15 +1,15 @@
 volumes:
-  autovm_local_postgres_data: {}
-  autovm_local_postgres_data_backups: {}
-  autovm_local_redis_data: {}
+  vm_local_postgres_data: {}
+  vm_local_postgres_data_backups: {}
+  vm_local_redis_data: {}
 
 services:
   django: &django
     build:
       context: .
       dockerfile: ./compose/local/django/Dockerfile
-    image: autovm_local_django
-    container_name: autovm_local_django
+    image: vm_local_django
+    container_name: vm_local_django
     depends_on:
       - postgres
       - redis
@@ -27,32 +27,32 @@ services:
     build:
       context: .
       dockerfile: ./compose/production/postgres/Dockerfile
-    image: autovm_production_postgres
-    container_name: autovm_local_postgres
+    image: vm_production_postgres
+    container_name: vm_local_postgres
     volumes:
-      - autovm_local_postgres_data:/var/lib/postgresql/data
-      - autovm_local_postgres_data_backups:/backups
+      - vm_local_postgres_data:/var/lib/postgresql/data
+      - vm_local_postgres_data_backups:/backups
     env_file:
       - ./.envs/.local/.postgres
 
   mailpit:
     image: docker.io/axllent/mailpit:latest
-    container_name: autovm_local_mailpit
+    container_name: vm_local_mailpit
     ports:
       - "8025:8025"
 
   redis:
     image: docker.io/redis:6
-    container_name: autovm_local_redis
+    container_name: vm_local_redis
 
     volumes:
-      - autovm_local_redis_data:/data
+      - vm_local_redis_data:/data
 
 
   celeryworker:
     <<: *django
-    image: autovm_local_celeryworker
-    container_name: autovm_local_celeryworker
+    image: vm_local_celeryworker
+    container_name: vm_local_celeryworker
     depends_on:
       - redis
       - postgres
@@ -62,8 +62,8 @@ services:
 
   celerybeat:
     <<: *django
-    image: autovm_local_celerybeat
-    container_name: autovm_local_celerybeat
+    image: vm_local_celerybeat
+    container_name: vm_local_celerybeat
     depends_on:
       - redis
       - postgres
@@ -73,8 +73,8 @@ services:
 
   flower:
     <<: *django
-    image: autovm_local_flower
-    container_name: autovm_local_flower
+    image: vm_local_flower
+    container_name: vm_local_flower
     ports:
       - '5555:5555'
     command: /start-flower

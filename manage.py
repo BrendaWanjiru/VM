@@ -25,8 +25,8 @@ if __name__ == "__main__":
         raise
 
     # This allows easy placement of apps within the interior
-    # autovm directory.
+    # vm directory.
     current_path = Path(__file__).parent.resolve()
-    sys.path.append(str(current_path / "autovm"))
+    sys.path.append(str(current_path / "vm"))
 
     execute_from_command_line(sys.argv)

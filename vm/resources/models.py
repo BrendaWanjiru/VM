@@ -3,8 +3,8 @@ import uuid
 import slugify
 from django.db import models
 
-from autovm.resources.utils.generate_vm_name import generate_vm_name
-from autovm.users.models import User
+from vm.resources.utils.generate_vm_name import generate_vm_name
+from vm.users.models import User
 
 
 class CommonBaseModel(models.Model):

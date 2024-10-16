@@ -1,9 +1,9 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
-from autovm.users.models import User, Customer, Guest
-from autovm.billing.models import BillingAccount
-from autovm.billing.api.serializers import RatePlanSerializer
+from vm.users.models import User, Customer, Guest
+from vm.billing.models import BillingAccount
+from vm.billing.api.serializers import RatePlanSerializer
 from dj_rest_auth.registration.serializers import RegisterSerializer
 
 UserModel = get_user_model()

@@ -11,8 +11,8 @@ from drf_spectacular.views import SpectacularAPIView
 from drf_spectacular.views import SpectacularSwaggerView
 from rest_framework.authtoken.views import obtain_auth_token
 
-from autovm.users.api.views import GuestRegistrationView
-from autovm.users.api.views import RegistrationView
+from vm.users.api.views import GuestRegistrationView
+from vm.users.api.views import RegistrationView
 
 
 urlpatterns = [
@@ -25,7 +25,7 @@ urlpatterns = [
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
     # User management
-    path("users/", include("autovm.users.urls", namespace="users")),
+    path("users/", include("vm.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
     # Media files
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),

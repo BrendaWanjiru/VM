@@ -1,7 +1,7 @@
 import pytest
 
-from autovm.users.models import User
-from autovm.users.tests.factories import UserFactory
+from vm.users.models import User
+from vm.users.tests.factories import UserFactory
 
 
 @pytest.fixture(autouse=True)

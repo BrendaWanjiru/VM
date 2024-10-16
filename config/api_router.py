@@ -2,7 +2,7 @@ from django.conf import settings
 from django.urls import path
 from rest_framework.routers import SimpleRouter, DefaultRouter
 
-from autovm.users.api.views import (
+from vm.users.api.views import (
     UserViewSet,
     GeneralAdminViewSet,
     CustomerViewset,
@@ -10,7 +10,7 @@ from autovm.users.api.views import (
     GoogleSocialLoginViewSet,
 )
 
-from autovm.resources.api.views import (
+from vm.resources.api.views import (
     RegionViewSet,
     OperatingSystemVersionViewSet,
     VirtualMachineViewSet,
@@ -19,7 +19,7 @@ from autovm.resources.api.views import (
     NotificationViewSet,
 )
 
-from autovm.billing.api.views import (
+from vm.billing.api.views import (
     RatePlanViewSet,
     SubscriptionViewSet,
     TransactionViewSet,

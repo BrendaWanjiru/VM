@@ -2,7 +2,7 @@ import uuid
 
 from django.db import models
 
-from autovm.users.models import User
+from vm.users.models import User
 
 
 class CommonBaseModel(models.Model):

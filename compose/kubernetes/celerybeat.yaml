@@ -27,11 +27,11 @@ spec:
                 name: secrets-production-django
             - secretRef:
                 name: secrets-production-postgres
-          image: <CR_URL>/autovm_production_celerybeat
+          image: <CR_URL>/vm_production_celerybeat
           name: celerybeat
           resources: {}
           volumeMounts:
-            - mountPath: /app/autovm/media
+            - mountPath: /app/vm/media
               name: media-local-storage
       restartPolicy: Always
       serviceAccountName: ""

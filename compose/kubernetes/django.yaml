@@ -18,7 +18,7 @@ spec:
       containers:
         - args:
             - /start
-          image: <CR_URL>/autovm_production_django
+          image: <CR_URL>/vm_production_django
           name: django
           ports:
             - name: gunicorn
@@ -39,7 +39,7 @@ spec:
               value: postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@$(POSTGRES_HOST):$(POSTGRES_PORT)/$(POSTGRES_DB)
           resources: {}
           volumeMounts:
-            - mountPath: /app/autovm/media
+            - mountPath: /app/vm/media
               name: media-local-storage
           livenessProbe:
             httpGet:

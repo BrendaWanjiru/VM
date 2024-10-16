@@ -1,6 +1,6 @@
 # ruff: noqa
 """
-ASGI config for autovm project.
+ASGI config for vm project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -16,9 +16,9 @@ from pathlib import Path
 from django.core.asgi import get_asgi_application
 
 # This allows easy placement of apps within the interior
-# autovm directory.
+# vm directory.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
-sys.path.append(str(BASE_DIR / "autovm"))
+sys.path.append(str(BASE_DIR / "vm"))
 
 # If DJANGO_SETTINGS_MODULE is unset, default to the local settings
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.local")

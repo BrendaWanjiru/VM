@@ -4,5 +4,5 @@ from django.utils.translation import gettext_lazy as _
 
 class BillingConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "autovm.billing"
+    name = "vm.billing"
     verbose_name = _("Billing")
